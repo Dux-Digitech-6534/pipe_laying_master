@@ -121,3 +121,8 @@
 @media (prefers-reduced-motion: reduce) {
   .cmr-button,.cmr-nav-item { transition: none; }
 }
+
+.cmr-nav-icon svg { width: 16px; height: 16px; }
+.cmr-backend-document-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cmr-document-result { display: flex; align-items: center; gap: 4px; flex-wrap: nowrap; white-space: nowrap; overflow-x: auto; }
+.cmr-document-result b, .cmr-document-result button { flex: 0 0 auto; }

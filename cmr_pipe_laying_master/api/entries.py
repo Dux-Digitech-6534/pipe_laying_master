@@ -12,7 +12,7 @@ def get_entry_options():
 	return {
 		"companies": _list("Company", ["name"]),
 		"projects": _list("Project", ["name", "project_name"], {"status": "Open"}),
-		"sites": _list("CMR Site", ["name", "site_name", "company", "project", "zone", "village", "default_warehouse"], {"status": "Active"}),
+		"sites": _all("CMR Site", ["name", "site_name", "company", "project", "zone", "village", "default_warehouse"], {"status": "Active"}),
 		"suppliers": _list("Supplier", ["name", "supplier_name"]),
 		"warehouses": _list("Warehouse", ["name", "warehouse_name", "company"], {"is_group": 0}),
 		"items": _list("Item", ["name", "item_code", "item_name", "stock_uom"], {"disabled": 0, "is_stock_item": 1}, 1000),
@@ -59,6 +59,10 @@ def _list(doctype, fields, filters=None, limit=500):
 		return frappe.get_list(doctype, fields=fields, filters=filters or {}, order_by="modified desc", limit_page_length=limit)
 	except frappe.PermissionError:
 		return []
+
+
+def _all(doctype, fields, filters=None, limit=500):
+	return frappe.get_all(doctype, fields=fields, filters=filters or {}, order_by="modified desc", limit_page_length=limit)
 
 
 def _required(data, *fields):

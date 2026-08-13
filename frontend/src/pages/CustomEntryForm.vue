@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import "../modern-form.css";
 import SearchSelect from "../components/forms/SearchSelect.vue";
 
@@ -15,6 +15,7 @@ const form = ref({});
 
 const isMaterial = computed(() => ["material-inward", "material-issue", "material-return"].includes(props.pageKey));
 const isTransfer = computed(() => ["material-issue", "material-return"].includes(props.pageKey));
+const filteredWarehouses = computed(() => options.value.warehouses.filter(row => !form.value.company || row.company === form.value.company));
 const submitLabel = computed(() => props.pageKey === "pipe-laying" ? "Send for Approval" : "Save & Submit");
 
 function blankItem() { return { item_code: "", qty: 1, rate: 0, uom: "", material_type: "Pipe", moc: "", pressure_rating: "", diameter: 0, consumable_type: "Consumable" }; }
@@ -44,6 +45,12 @@ async function loadOptions() {
   } catch (e) { error.value = "Form options could not be loaded. Please check your role permissions."; }
   finally { loading.value = false; }
 }
+watch(() => form.value.company, company => {
+  for (const field of ["warehouse", "source_warehouse", "target_warehouse"]) {
+    const selected = options.value.warehouses.find(row => row.name === form.value[field]);
+    if (selected && company && selected.company !== company) form.value[field] = "";
+  }
+});
 function selectSite() {
   const site = options.value.sites.find(x => x.name === form.value.site);
   if (!site) return;
@@ -99,13 +106,13 @@ onMounted(loadOptions);
 <template>
   <section class="cmr-modern-form">
     <div class="cmr-form-toolbar">
-      <div><button class="cmr-back-link" type="button" @click="emit('close')">← Back</button><h2>New {{ title }}</h2><p>CMR portal entry • ERPNext backend document</p></div>
+      <div><button class="cmr-back-link" type="button" @click="emit('close')">← Back</button><h2>New {{ title }}</h2><p class="cmr-backend-document-label">CMR portal entry • ERPNext backend document</p></div>
       <div class="cmr-form-actions"><button class="cmr-button" type="button" :disabled="saving" @click="save('draft')">Save Draft</button><button class="cmr-button primary" type="button" :disabled="saving" @click="save('submit')">{{ saving ? 'Saving…' : submitLabel }}</button></div>
     </div>
     <div class="cmr-native-note"><span>♢</span>This form stays inside CMR Portal. ERPNext permissions, validations and stock rules run when you save.</div>
     <div v-if="loading" class="cmr-form-message">Loading form data…</div>
     <div v-if="error" class="cmr-form-message error">{{ error }}</div>
-    <div v-if="success" class="cmr-form-message success"><b>{{ success.name }}</b> backend {{ success.doctype }} me successfully save hua. <button type="button" @click="resetForm">Create another</button></div>
+    <div v-if="success" class="cmr-form-message success cmr-document-result"><b>{{ success.name }}</b> backend {{ success.doctype }} me successfully save hua. <button type="button" @click="resetForm">Create another</button></div>
 
     <template v-if="!loading">
       <div class="cmr-form-section">
@@ -118,14 +125,14 @@ onMounted(loadOptions);
           <label><span>CMR Site *</span><SearchSelect v-model="form.site" :options="options.sites" label-key="site_name" secondary-key="project" placeholder="Search site…" create-label="Create a new Site" @change="selectSite" @create="openMaster('master-site')" /></label>
 
           <template v-if="pageKey === 'material-inward'">
-            <label><span>Receiving Warehouse *</span><SearchSelect v-model="form.warehouse" :options="options.warehouses" placeholder="Search warehouse…" /></label>
+            <label><span>Receiving Warehouse *</span><SearchSelect v-model="form.warehouse" :options="filteredWarehouses" placeholder="Search warehouse…" /></label>
             <label><span>MRN / GRN No</span><input v-model="form.mrn_no" placeholder="MRN reference" /></label>
             <label><span>Supplier Delivery Note</span><input v-model="form.supplier_delivery_note" /></label>
           </template>
           <template v-if="isTransfer">
             <label><span>Contractor Assignment *</span><SearchSelect v-model="form.contractor_assignment" :options="options.contractors" label-key="contractor" secondary-key="name" placeholder="Search contractor…" create-label="Create a new Contractor Assignment" @change="selectContractor" @create="openMaster('master-contractor')" /></label>
-            <label><span>From Warehouse *</span><SearchSelect v-model="form.source_warehouse" :options="options.warehouses" placeholder="Search source warehouse…" /></label>
-            <label><span>To Warehouse *</span><SearchSelect v-model="form.target_warehouse" :options="options.warehouses" placeholder="Search destination warehouse…" /></label>
+            <label><span>From Warehouse *</span><SearchSelect v-model="form.source_warehouse" :options="filteredWarehouses" placeholder="Search source warehouse…" /></label>
+            <label><span>To Warehouse *</span><SearchSelect v-model="form.target_warehouse" :options="filteredWarehouses" placeholder="Search destination warehouse…" /></label>
           </template>
           <template v-if="pageKey === 'pipe-laying'">
             <label><span>Zone *</span><input v-model="form.zone" /></label><label><span>Village *</span><input v-model="form.village" /></label>
@@ -165,7 +172,7 @@ onMounted(loadOptions);
 
       <div v-if="pageKey === 'restoration'" class="cmr-form-section"><div class="cmr-section-title"><span>2</span><div><b>Restoration Details</b><small>Road dimensions and concrete breakup</small></div></div><div class="cmr-form-grid"><label><span>Length (m) *</span><input v-model.number="form.pipe_length" type="number" /></label><label><span>Width (m) *</span><input v-model.number="form.pipe_width" type="number" /></label><label><span>Restoration Type *</span><select v-model="form.restoration_type"><option>CC Road</option><option>BT Road</option><option>WBM Road</option><option>Paver Block</option><option>Earthen Road</option><option>Other</option></select></label></div><div class="cmr-grade-grid"><div v-for="grade in ['m15','m20','m30']" :key="grade"><b>{{ grade.toUpperCase() }}</b><label><span>Length</span><input v-model.number="form[`${grade}_length`]" type="number" /></label><label><span>Depth</span><input v-model.number="form[`${grade}_depth`]" type="number" /></label><strong>{{ concreteQty(grade) }} m³</strong></div></div><div class="cmr-form-grid"><label><span>From Latitude</span><input v-model.number="form.gps_latitude_from" type="number" /></label><label><span>From Longitude</span><input v-model.number="form.gps_longitude_from" type="number" /></label><label><span>To Latitude</span><input v-model.number="form.gps_latitude_to" type="number" /></label><label><span>To Longitude</span><input v-model.number="form.gps_longitude_to" type="number" /></label></div></div>
 
-      <div class="cmr-form-section"><div class="cmr-section-title"><span>✓</span><div><b>Remarks & Save</b><small>Review the entry before saving</small></div></div><label class="cmr-full-field"><span>Remarks</span><textarea v-model="form.remarks" rows="3" placeholder="Enter remarks or site notes"></textarea></label><div class="cmr-bottom-actions"><button class="cmr-button" type="button" @click="emit('close')">Cancel</button><button class="cmr-button" type="button" :disabled="saving" @click="save('draft')">Save Draft</button><button class="cmr-button primary" type="button" :disabled="saving" @click="save('submit')">{{ submitLabel }}</button></div></div>
+      <div class="cmr-form-section"><div class="cmr-section-title"><span>✓</span><div><b>Remarks</b><small>Optional notes for this document</small></div></div><label class="cmr-full-field"><span>Remarks</span><textarea v-model="form.remarks" rows="3" placeholder="Enter remarks or site notes"></textarea></label></div>
     </template>
   </section>
 </template>
