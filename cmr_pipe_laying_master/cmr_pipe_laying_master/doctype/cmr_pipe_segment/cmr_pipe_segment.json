@@ -1,0 +1,22 @@
+{
+ "actions": [], "doctype": "DocType", "editable_grid": 1, "engine": "InnoDB",
+ "field_order": ["pipe_no", "pipe_item", "start_node", "end_node", "chainage_from", "chainage_to", "diameter", "moc", "pressure_rating", "drawing_length", "actual_length", "current_stock", "valve_status", "restoration_required", "restoration_status"],
+ "fields": [
+  {"fieldname": "pipe_no", "fieldtype": "Data", "in_list_view": 1, "label": "Pipe No", "reqd": 1},
+  {"fieldname": "pipe_item", "fieldtype": "Link", "in_list_view": 1, "label": "Pipe Item", "options": "Item", "reqd": 1},
+  {"fieldname": "start_node", "fieldtype": "Data", "label": "Start Node"},
+  {"fieldname": "end_node", "fieldtype": "Data", "label": "End Node"},
+  {"fieldname": "chainage_from", "fieldtype": "Float", "in_list_view": 1, "label": "Chainage From", "reqd": 1},
+  {"fieldname": "chainage_to", "fieldtype": "Float", "in_list_view": 1, "label": "Chainage To", "reqd": 1},
+  {"fieldname": "diameter", "fieldtype": "Float", "label": "Diameter (mm)"},
+  {"fieldname": "moc", "fieldtype": "Data", "label": "MOC"},
+  {"fieldname": "pressure_rating", "fieldtype": "Data", "label": "Class / Pressure Rating"},
+  {"fieldname": "drawing_length", "fieldtype": "Float", "label": "Drawing Length"},
+  {"fieldname": "actual_length", "fieldtype": "Float", "in_list_view": 1, "label": "Actual Laid Length", "reqd": 1},
+  {"fieldname": "current_stock", "fieldtype": "Float", "label": "Current Contractor Stock", "read_only": 1},
+  {"default": "Pending", "fieldname": "valve_status", "fieldtype": "Select", "label": "Valve Status", "options": "Not Required\nPending\nCompleted"},
+  {"default": "1", "fieldname": "restoration_required", "fieldtype": "Check", "label": "Restoration Required"},
+  {"default": "Pending", "fieldname": "restoration_status", "fieldtype": "Select", "label": "Restoration Status", "options": "Not Required\nPending\nCompleted"}
+ ],
+ "istable": 1, "links": [], "module": "CMR Pipe Laying Master", "name": "CMR Pipe Segment", "permissions": [], "sort_field": "idx", "sort_order": "ASC", "states": []
+}

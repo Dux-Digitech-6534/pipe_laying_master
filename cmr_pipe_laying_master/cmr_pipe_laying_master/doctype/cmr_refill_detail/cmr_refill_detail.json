@@ -1,0 +1,12 @@
+{
+ "actions": [], "doctype": "DocType", "editable_grid": 1, "engine": "InnoDB",
+ "field_order": ["material_type", "length", "width", "depth", "quantity"],
+ "fields": [
+  {"fieldname": "material_type", "fieldtype": "Select", "in_list_view": 1, "label": "Refill Material", "options": "Murum\nExcavated Earth\nMetal\nStone Dust\nSand\nGood Earth\nOther", "reqd": 1},
+  {"fieldname": "length", "fieldtype": "Float", "label": "Length (m)", "reqd": 1},
+  {"fieldname": "width", "fieldtype": "Float", "label": "Width (m)", "reqd": 1},
+  {"fieldname": "depth", "fieldtype": "Float", "in_list_view": 1, "label": "Depth (m)", "reqd": 1},
+  {"fieldname": "quantity", "fieldtype": "Float", "in_list_view": 1, "label": "Quantity (m³)", "read_only": 1}
+ ],
+ "istable": 1, "links": [], "module": "CMR Pipe Laying Master", "name": "CMR Refill Detail", "permissions": [], "sort_field": "idx", "sort_order": "ASC", "states": []
+}

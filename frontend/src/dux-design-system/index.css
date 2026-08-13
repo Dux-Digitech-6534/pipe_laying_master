@@ -1,0 +1,17 @@
+@import "./tokens/colors.css";
+@import "./tokens/spacing.css";
+@import "./tokens/typography.css";
+
+.cmr-app {
+  font-family: var(--font-ui);
+  color: var(--text-primary);
+  background: var(--ambient), var(--bg-app);
+}
+
+.cmr-app input[type="number"],
+.cmr-app input[type="date"],
+.cmr-app .cmr-stat-card strong,
+.cmr-app .cmr-line-table td {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}

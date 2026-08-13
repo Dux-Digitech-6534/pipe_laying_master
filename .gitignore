@@ -53,3 +53,8 @@ jspm_packages/
 
 # Aider AI Chat
 .aider*
+
+# Ship the production portal bundle for immediate Frappe deployment.
+!cmr_pipe_laying_master/public/dist/
+!cmr_pipe_laying_master/public/dist/cmr-pipe-laying-master-v11.js
+!cmr_pipe_laying_master/public/dist/cmr-pipe-laying-master-v11.css

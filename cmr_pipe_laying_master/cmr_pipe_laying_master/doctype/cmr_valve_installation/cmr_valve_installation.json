@@ -1,0 +1,32 @@
+{
+ "actions": [], "autoname": "format:CMR-VAL-{YYYY}-{#####}", "doctype": "DocType", "engine": "InnoDB",
+ "field_order": ["installation_date", "company", "project", "site", "zone", "village", "pipe_measurement", "pipe_no", "contractor_assignment", "contractor_warehouse", "valve_section", "valve_item", "quantity", "uom", "chamber_size", "specific_location", "gps_latitude", "gps_longitude", "fittings_section", "fittings", "status", "remarks", "stock_entry"],
+ "fields": [
+  {"default": "Today", "fieldname": "installation_date", "fieldtype": "Date", "in_list_view": 1, "label": "Installation Date", "reqd": 1},
+  {"fieldname": "company", "fieldtype": "Link", "label": "Company", "options": "Company", "reqd": 1},
+  {"fieldname": "project", "fieldtype": "Link", "in_list_view": 1, "label": "Project", "options": "Project", "reqd": 1},
+  {"fieldname": "site", "fieldtype": "Link", "in_list_view": 1, "label": "Site", "options": "CMR Site", "reqd": 1},
+  {"fieldname": "zone", "fieldtype": "Data", "label": "Zone / Cluster", "reqd": 1},
+  {"fieldname": "village", "fieldtype": "Data", "label": "Village", "reqd": 1},
+  {"fieldname": "pipe_measurement", "fieldtype": "Link", "label": "Pipe Laying Measurement", "options": "CMR Pipe Laying Measurement", "reqd": 1},
+  {"fieldname": "pipe_no", "fieldtype": "Data", "in_list_view": 1, "label": "Pipe No", "reqd": 1},
+  {"fieldname": "contractor_assignment", "fieldtype": "Link", "label": "Valve Contractor Assignment", "options": "CMR Contractor Assignment", "reqd": 1},
+  {"fetch_from": "contractor_assignment.contractor_warehouse", "fieldname": "contractor_warehouse", "fieldtype": "Link", "label": "Contractor Warehouse", "options": "Warehouse", "read_only": 1, "reqd": 1},
+  {"fieldname": "valve_section", "fieldtype": "Section Break", "label": "Valve Details"},
+  {"fieldname": "valve_item", "fieldtype": "Link", "in_list_view": 1, "label": "Valve Item", "options": "Item", "reqd": 1},
+  {"default": "1", "fieldname": "quantity", "fieldtype": "Float", "in_list_view": 1, "label": "Quantity", "reqd": 1},
+  {"default": "Nos", "fieldname": "uom", "fieldtype": "Link", "label": "UOM", "options": "UOM", "reqd": 1},
+  {"fieldname": "chamber_size", "fieldtype": "Data", "label": "Valve Chamber Size", "reqd": 1},
+  {"fieldname": "specific_location", "fieldtype": "Data", "label": "Specific Location"},
+  {"fieldname": "gps_latitude", "fieldtype": "Float", "label": "GPS Latitude", "reqd": 1},
+  {"fieldname": "gps_longitude", "fieldtype": "Float", "label": "GPS Longitude", "reqd": 1},
+  {"fieldname": "fittings_section", "fieldtype": "Section Break", "label": "Valve Fittings"},
+  {"fieldname": "fittings", "fieldtype": "Table", "label": "Fitting Consumption", "options": "CMR Valve Fitting Item"},
+  {"default": "Draft", "fieldname": "status", "fieldtype": "Select", "label": "Status", "options": "Draft\nCompleted", "read_only": 1},
+  {"fieldname": "remarks", "fieldtype": "Small Text", "label": "Remarks"},
+  {"fieldname": "stock_entry", "fieldtype": "Link", "label": "Consumption Stock Entry", "options": "Stock Entry", "read_only": 1}
+ ],
+ "is_submittable": 1, "links": [], "module": "CMR Pipe Laying Master", "name": "CMR Valve Installation",
+ "permissions": [{"amend": 1, "cancel": 1, "create": 1, "delete": 1, "email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "role": "System Manager", "share": 1, "submit": 1, "write": 1}],
+ "search_fields": "project,site,pipe_measurement,pipe_no,valve_item", "sort_field": "modified", "sort_order": "DESC", "states": []
+}

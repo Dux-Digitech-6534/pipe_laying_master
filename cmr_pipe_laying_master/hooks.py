@@ -250,3 +250,8 @@ app_license = "mit"
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
 
+
+# Keep the Power App migration foundation synchronized.
+after_install = "cmr_pipe_laying_master.setup.install.after_install"
+after_migrate = "cmr_pipe_laying_master.setup.install.after_migrate"
+

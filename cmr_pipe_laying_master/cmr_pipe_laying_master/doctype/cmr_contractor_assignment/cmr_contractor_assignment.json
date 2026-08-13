@@ -1,0 +1,26 @@
+{
+ "actions": [],
+ "autoname": "format:CMR-CA-{YYYY}-{#####}",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": ["contractor", "company", "project", "site", "work_type", "contractor_warehouse", "from_date", "to_date", "active"],
+ "fields": [
+  {"fieldname": "contractor", "fieldtype": "Link", "in_list_view": 1, "label": "Contractor", "options": "Supplier", "reqd": 1},
+  {"fieldname": "company", "fieldtype": "Link", "in_list_view": 1, "label": "Company", "options": "Company", "reqd": 1},
+  {"fieldname": "project", "fieldtype": "Link", "in_list_view": 1, "label": "Project", "options": "Project", "reqd": 1},
+  {"fieldname": "site", "fieldtype": "Link", "in_list_view": 1, "label": "Site", "options": "CMR Site", "reqd": 1},
+  {"fieldname": "work_type", "fieldtype": "Select", "label": "Work Type", "options": "Pipe Laying\nValve Installation\nRoad Restoration\nMultiple", "reqd": 1},
+  {"fieldname": "contractor_warehouse", "fieldtype": "Link", "label": "Contractor Warehouse", "options": "Warehouse"},
+  {"fieldname": "from_date", "fieldtype": "Date", "label": "From Date"},
+  {"fieldname": "to_date", "fieldtype": "Date", "label": "To Date"},
+  {"default": "1", "fieldname": "active", "fieldtype": "Check", "in_list_view": 1, "label": "Active"}
+ ],
+ "links": [],
+ "module": "CMR Pipe Laying Master",
+ "name": "CMR Contractor Assignment",
+ "permissions": [{"create": 1, "delete": 1, "email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "role": "System Manager", "share": 1, "write": 1}],
+ "search_fields": "contractor,project,site,work_type",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

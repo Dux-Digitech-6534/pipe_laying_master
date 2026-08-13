@@ -1,0 +1,18 @@
+{
+ "actions": [], "doctype": "DocType", "editable_grid": 1, "engine": "InnoDB",
+ "field_order": ["excavation_type", "length", "width", "calculated_depth", "actual_depth", "calculated_qty", "actual_qty", "gps_latitude_from", "gps_longitude_from", "gps_latitude_to", "gps_longitude_to"],
+ "fields": [
+  {"fieldname": "excavation_type", "fieldtype": "Select", "in_list_view": 1, "label": "Excavation Type", "options": "Dismantling Cement Concrete Pavement\nExcavation Ordinary Soil\nExcavation Hard Rock", "reqd": 1},
+  {"fieldname": "length", "fieldtype": "Float", "in_list_view": 1, "label": "Length (m)", "reqd": 1},
+  {"fieldname": "width", "fieldtype": "Float", "label": "Width (m)", "reqd": 1},
+  {"fieldname": "calculated_depth", "fieldtype": "Float", "label": "Calculated Depth (m)"},
+  {"fieldname": "actual_depth", "fieldtype": "Float", "in_list_view": 1, "label": "Actual Depth (m)", "reqd": 1},
+  {"fieldname": "calculated_qty", "fieldtype": "Float", "label": "Calculated Qty (m³)", "read_only": 1},
+  {"fieldname": "actual_qty", "fieldtype": "Float", "in_list_view": 1, "label": "Actual Qty (m³)", "read_only": 1},
+  {"fieldname": "gps_latitude_from", "fieldtype": "Float", "label": "From Latitude"},
+  {"fieldname": "gps_longitude_from", "fieldtype": "Float", "label": "From Longitude"},
+  {"fieldname": "gps_latitude_to", "fieldtype": "Float", "label": "To Latitude"},
+  {"fieldname": "gps_longitude_to", "fieldtype": "Float", "label": "To Longitude"}
+ ],
+ "istable": 1, "links": [], "module": "CMR Pipe Laying Master", "name": "CMR Excavation Detail", "permissions": [], "sort_field": "idx", "sort_order": "ASC", "states": []
+}

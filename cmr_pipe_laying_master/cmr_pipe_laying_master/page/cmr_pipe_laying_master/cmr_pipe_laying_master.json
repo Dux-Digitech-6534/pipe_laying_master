@@ -1,0 +1,17 @@
+{
+ "content": null,
+ "doctype": "Page",
+ "module": "CMR Pipe Laying Master",
+ "name": "cmr-pipe-laying-master",
+ "page_name": "cmr-pipe-laying-master",
+ "roles": [
+  {
+   "role": "System Manager"
+  }
+ ],
+ "script": null,
+ "standard": "Yes",
+ "style": null,
+ "system_page": 0,
+ "title": "CMR Pipe Laying Master"
+}
