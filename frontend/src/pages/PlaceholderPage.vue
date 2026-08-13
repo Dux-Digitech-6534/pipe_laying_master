@@ -45,14 +45,22 @@ function newEntry() {
   if (isTransaction.value || isMaster.value) { creating.value = true; return; }
   if (window.frappe) window.frappe.new_doc(config.value.doctype, config.value.defaults || {});
 }
+function showBackendList(result) {
+  creating.value = false;
+  if (result?.doctype && window.frappe) window.frappe.set_route("List", result.doctype);
+}
+function handleMasterSaved(result) {
+  creating.value = false;
+  if (!hasCustomList.value && result?.doctype && window.frappe) window.frappe.set_route("List", result.doctype);
+}
 function openRecords() {
   if (config.value && window.frappe) window.frappe.set_route("List", config.value.doctype);
 }
 </script>
 
 <template>
-  <CustomEntryForm v-if="creating && isTransaction" :page-key="pageKey" :title="config.label" @close="creating = false" @create-master="emit('navigate', $event)" />
-  <CustomMasterForm v-else-if="creating && isMaster" :page-key="pageKey" :title="config.label" :simple-masters="simpleMasters" @close="creating = false" @create-master="emit('navigate', $event)" />
+  <CustomEntryForm v-if="creating && isTransaction" :page-key="pageKey" :title="config.label" @close="creating = false" @saved="showBackendList" @create-master="emit('navigate', $event)" />
+  <CustomMasterForm v-else-if="creating && isMaster" :page-key="pageKey" :title="config.label" :simple-masters="simpleMasters" @close="creating = false" @saved="handleMasterSaved" @create-master="emit('navigate', $event)" />
   <MasterList v-else-if="hasCustomList" :page-key="pageKey" :title="title" :description="description" @create="newEntry" />
   <template v-else>
     <PageHeader :title="title" :description="description">

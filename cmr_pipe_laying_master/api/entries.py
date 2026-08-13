@@ -94,6 +94,9 @@ def _item_values(item_code, qty, warehouse, rate=0):
 
 def _build_purchase_receipt(data):
 	_required(data, "company", "supplier", "posting_date", "site", "warehouse")
+	transport_cost = flt(data.get("transport_cost"))
+	if transport_cost < 0:
+		frappe.throw("Transport Cost cannot be negative")
 	doc = frappe.new_doc("Purchase Receipt")
 	doc.company = data["company"]
 	doc.supplier = data["supplier"]
@@ -104,7 +107,7 @@ def _build_purchase_receipt(data):
 	doc.custom_cmr_site = data["site"]
 	doc.custom_cmr_mrn_no = data.get("mrn_no")
 	doc.custom_cmr_vehicle_type = data.get("vehicle_type")
-	doc.custom_cmr_transport_cost = flt(data.get("transport_cost"))
+	doc.custom_cmr_transport_cost = transport_cost
 	doc.custom_cmr_driver_name = data.get("driver_name")
 	doc.custom_cmr_driver_mobile = data.get("driver_mobile")
 	doc.custom_cmr_lr_no = data.get("lr_no")

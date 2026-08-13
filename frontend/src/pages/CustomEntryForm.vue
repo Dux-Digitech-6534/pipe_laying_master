@@ -86,6 +86,7 @@ function openMaster(pageKey) { emit("create-master", pageKey); }
 function addRow(table, factory) { form.value[table].push(factory()); }
 function removeRow(table, index) { if (form.value[table].length > 1 || table === "fittings") form.value[table].splice(index, 1); }
 function amount(row) { return (Number(row.qty) || 0) * (Number(row.rate) || 0); }
+function keepNonNegative(field) { if (Number(form.value[field]) < 0) form.value[field] = 0; }
 function concreteQty(grade) { return ((Number(form.value[`${grade}_length`]) || 0) * (Number(form.value.pipe_width) || 0) * (Number(form.value[`${grade}_depth`]) || 0)).toFixed(3); }
 
 async function save(action) {
@@ -154,7 +155,7 @@ onMounted(loadOptions);
 
       <div v-if="pageKey === 'material-inward'" class="cmr-form-section">
         <div class="cmr-section-title"><span>2</span><div><b>Transport & Invoice</b><small>Vehicle, driver and invoice tracking</small></div></div>
-        <div class="cmr-form-grid"><label><span>Vehicle Type</span><select v-model="form.vehicle_type"><option>Truck</option><option>Trailer</option><option>Tempo</option><option>Pickup</option><option>Other</option></select></label><label><span>Transport Cost</span><input v-model.number="form.transport_cost" type="number" /></label><label><span>Driver / Brought By</span><input v-model="form.driver_name" /></label><label><span>Driver Mobile</span><input v-model="form.driver_mobile" /></label><label><span>LR No</span><input v-model="form.lr_no" /></label><label><span>Invoice Status</span><select v-model="form.invoice_status"><option>Pending</option><option>Paid</option></select></label></div>
+        <div class="cmr-form-grid"><label><span>Vehicle Type</span><select v-model="form.vehicle_type"><option>Truck</option><option>Trailer</option><option>Tempo</option><option>Pickup</option><option>Other</option></select></label><label><span>Transport Cost</span><input v-model.number="form.transport_cost" type="number" min="0" step="0.01" @input="keepNonNegative('transport_cost')" /></label><label><span>Driver / Brought By</span><input v-model="form.driver_name" /></label><label><span>Driver Mobile</span><input v-model="form.driver_mobile" /></label><label><span>LR No</span><input v-model="form.lr_no" /></label><label><span>Invoice Status</span><select v-model="form.invoice_status"><option>Pending</option><option>Paid</option></select></label></div>
       </div>
 
       <div v-if="isMaterial" class="cmr-form-section">

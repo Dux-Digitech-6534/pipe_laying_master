@@ -4,7 +4,7 @@ import "../modern-form.css";
 import SearchSelect from "../components/forms/SearchSelect.vue";
 
 const props = defineProps({ pageKey: String, title: String, simpleMasters: Boolean });
-const emit = defineEmits(["close", "create-master"]);
+const emit = defineEmits(["close", "create-master", "saved"]);
 const options = ref({});
 const form = ref({});
 const loading = ref(true);
@@ -47,7 +47,7 @@ watch(() => form.value.company, company => {
 function siteChanged() { const site = options.value.sites?.find(x => x.name === form.value.site); if (site) { form.value.company = site.company; form.value.project = site.project; } }
 async function save() {
   saving.value = true; error.value = "";
-  try { success.value = await call("cmr_pipe_laying_master.api.masters.save_master", { master_type: props.pageKey, payload: JSON.stringify(form.value) }); window.frappe.show_alert({ message: `${success.value.name} created`, indicator: "green" }, 6); }
+  try { success.value = await call("cmr_pipe_laying_master.api.masters.save_master", { master_type: props.pageKey, payload: JSON.stringify(form.value) }); window.frappe.show_alert({ message: `${success.value.name} created`, indicator: "green" }, 6); emit("saved", success.value); }
   catch (e) { error.value = "Master save nahi hua. Required values aur duplicate name check karein."; }
   finally { saving.value = false; }
 }
