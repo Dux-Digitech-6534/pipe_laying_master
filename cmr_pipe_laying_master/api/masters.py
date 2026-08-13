@@ -121,11 +121,8 @@ def _site(data):
 	_required(data, "site_name")
 	doc = frappe.new_doc("CMR Site")
 	doc.site_name = data["site_name"]
-	doc.company = _default_company()
-	doc.project = frappe.db.get_value("Project", {"status": "Open"}, "name", order_by="modified desc") or frappe.db.get_value("Project")
-	if not doc.project:
-		frappe.throw("Please create a Project before creating a Site")
 	doc.status = "Active"
+	doc.flags.ignore_mandatory = True
 	return doc
 
 
