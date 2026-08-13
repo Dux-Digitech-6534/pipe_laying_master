@@ -121,6 +121,8 @@ def _site(data):
 	_required(data, "site_name")
 	doc = frappe.new_doc("CMR Site")
 	doc.site_name = data["site_name"]
+	doc.company = None
+	doc.project = None
 	doc.status = "Active"
 	doc.flags.ignore_mandatory = True
 	return doc
