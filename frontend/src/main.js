@@ -4,7 +4,7 @@ import "./styles.css";
 import "./dux-design-system/index.css";
 import "./dux-overrides.css";
 
-export const version = "11";
+export const version = "12";
 
 let activeApp = null;
 

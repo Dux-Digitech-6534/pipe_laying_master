@@ -1,5 +1,5 @@
 frappe.pages["cmr-pipe-laying-master"].on_page_load = function (wrapper) {
-	const UI_VERSION = "11";
+	const UI_VERSION = "12";
 	const page = frappe.ui.make_app_page({ parent: wrapper, title: __("CMR Pipe Laying Master"), single_column: true });
 	$(wrapper).find(".page-head").hide();
 	page.main.html('<div class="cmr-page-host"><div class="cmr-loading">Loading CMR Pipe Laying Master...</div></div>');
@@ -47,8 +47,8 @@ frappe.pages["cmr-pipe-laying-master"].on_page_load = function (wrapper) {
 		method: "cmr_pipe_laying_master.api.bootstrap.get_bootstrap",
 		callback: async function (response) {
 			try {
-				load_css("/assets/cmr_pipe_laying_master/dist/cmr-pipe-laying-master-v11.css");
-				await load_script("/assets/cmr_pipe_laying_master/dist/cmr-pipe-laying-master-v11.js");
+				load_css("/assets/cmr_pipe_laying_master/dist/cmr-pipe-laying-master-v12.css");
+				await load_script("/assets/cmr_pipe_laying_master/dist/cmr-pipe-laying-master-v12.js");
 				if (!window.CMRPipeLayingMaster?.mount || window.CMRPipeLayingMaster.version !== UI_VERSION) throw new Error("Latest frontend bundle could not be activated.");
 				window.CMRPipeLayingMaster.mount(host, { bootstrap: response.message || {} });
 			} catch (error) {

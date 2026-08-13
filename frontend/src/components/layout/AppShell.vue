@@ -3,7 +3,7 @@ import { ref } from "vue";
 import Sidebar from "./Sidebar.vue";
 import TopHeader from "./TopHeader.vue";
 
-defineProps({ activePage: String, pageTitle: String, user: String, company: String, financialYear: String });
+defineProps({ activePage: String, pageTitle: String, user: String, company: String, financialYear: String, simpleMasters: Boolean });
 defineEmits(["navigate"]);
 const sidebarOpen = ref(false);
 const collapsed = ref(false);
@@ -15,7 +15,7 @@ function toggleSidebar() {
 
 <template>
   <div class="cmr-app" :class="{ 'sidebar-open': sidebarOpen, collapsed }">
-    <Sidebar :active-page="activePage" :collapsed="collapsed" :user="user" @navigate="(page) => { $emit('navigate', page); sidebarOpen = false; }" />
+    <Sidebar :active-page="activePage" :collapsed="collapsed" :user="user" :simple-masters="simpleMasters" @navigate="(page) => { $emit('navigate', page); sidebarOpen = false; }" />
     <div class="cmr-main">
       <TopHeader :page-title="pageTitle" :user="user" :company="company" :financial-year="financialYear" @toggle-sidebar="toggleSidebar" />
       <main class="cmr-content"><slot /></main>

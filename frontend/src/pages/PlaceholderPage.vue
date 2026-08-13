@@ -3,9 +3,10 @@ import { computed, ref, watch } from "vue";
 import PageHeader from "../components/common/PageHeader.vue";
 import CustomEntryForm from "./CustomEntryForm.vue";
 import CustomMasterForm from "./CustomMasterForm.vue";
+import MasterList from "./MasterList.vue";
 import "../entry.css";
 
-const props = defineProps({ title: String, description: String, pageKey: String });
+const props = defineProps({ title: String, description: String, pageKey: String, simpleMasters: Boolean });
 const emit = defineEmits(["navigate"]);
 const configs = {
   "material-inward": { doctype: "Purchase Receipt", label: "Material Inward", defaults: { source_app: "CMR Pipe Laying Master" } },
@@ -16,7 +17,7 @@ const configs = {
   restoration: { doctype: "CMR Road Restoration", label: "Road Restoration" },
   "master-project": { doctype: "Project", label: "Project" },
   "master-site": { doctype: "CMR Site", label: "Site" },
-  "master-material": { doctype: "Item", label: "Material Item", defaults: { is_stock_item: 1 } },
+  "master-material": { doctype: "Item", label: "Item", defaults: { is_stock_item: 1 } },
   "master-contractor": { doctype: "CMR Contractor Assignment", label: "Contractor Assignment" },
   "master-supplier": { doctype: "Supplier", label: "Supplier" },
   "master-store": { doctype: "Warehouse", label: "Store / Warehouse" },
@@ -30,10 +31,12 @@ const configs = {
 };
 const transactionKeys = ["material-inward", "material-issue", "material-return", "pipe-laying", "valves", "restoration"];
 const masterKeys = ["master-project", "master-site", "master-material", "master-contractor", "master-supplier", "master-store", "master-attributes"];
+const customListKeys = ["master-project", "master-site", "master-material"];
 const config = computed(() => configs[props.pageKey]);
 const canCreate = computed(() => config.value && !config.value.report);
 const isTransaction = computed(() => transactionKeys.includes(props.pageKey));
 const isMaster = computed(() => masterKeys.includes(props.pageKey));
+const hasCustomList = computed(() => props.simpleMasters && customListKeys.includes(props.pageKey));
 const creating = ref(false);
 watch(() => props.pageKey, () => { creating.value = false; });
 
@@ -49,7 +52,8 @@ function openRecords() {
 
 <template>
   <CustomEntryForm v-if="creating && isTransaction" :page-key="pageKey" :title="config.label" @close="creating = false" @create-master="emit('navigate', $event)" />
-  <CustomMasterForm v-else-if="creating && isMaster" :page-key="pageKey" :title="config.label" @close="creating = false" @create-master="emit('navigate', $event)" />
+  <CustomMasterForm v-else-if="creating && isMaster" :page-key="pageKey" :title="config.label" :simple-masters="simpleMasters" @close="creating = false" @create-master="emit('navigate', $event)" />
+  <MasterList v-else-if="hasCustomList" :page-key="pageKey" :title="title" :description="description" @create="newEntry" />
   <template v-else>
     <PageHeader :title="title" :description="description">
       <template #actions>

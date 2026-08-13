@@ -1,4 +1,4 @@
-﻿import { defineConfig } from "vite";
+import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { resolve } from "node:path";
 
@@ -14,12 +14,12 @@ export default defineConfig({
       entry: resolve(__dirname, "src/main.js"),
       name: "CMRPipeLayingMaster",
       formats: ["iife"],
-      fileName: () => "cmr-pipe-laying-master-v11.js",
+      fileName: () => "cmr-pipe-laying-master-v12.js",
     },
     rollupOptions: {
       output: {
         footer: "window.CMRPipeLayingMaster = CMRPipeLayingMaster;",
-        assetFileNames: (assetInfo) => assetInfo.name === "style.css" ? "cmr-pipe-laying-master-v11.css" : "[name][extname]",
+        assetFileNames: (assetInfo) => assetInfo.name === "style.css" ? "cmr-pipe-laying-master-v12.css" : "[name][extname]",
       },
     },
   },

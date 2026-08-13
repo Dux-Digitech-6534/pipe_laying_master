@@ -7,6 +7,7 @@ import PlaceholderPage from "./pages/PlaceholderPage.vue";
 
 const props = defineProps({ bootstrap: { type: Object, default: () => ({}) } });
 const currentPage = ref("dashboard");
+const simpleMasters = computed(() => props.bootstrap?.site === "jewipl.duxdigitech.in");
 
 const pages = {
   dashboard: ["Dashboard", "Project execution and material overview"],
@@ -16,10 +17,9 @@ const pages = {
   "pipe-laying": ["Pipe Laying Measurement", "Capture measured pipeline execution and completion"],
   valves: ["Valve Details", "Record valve installation against registered pipe segments"],
   restoration: ["Road Restoration", "Track restoration work against pipe laying measurements"],
-  masters: ["Masters & Settings", "Configure master data used by CMR workflows"],
-  "master-project": ["Project Master", "Project setup for CMR execution sites"],
-  "master-site": ["Site Master", "Project, zone, village and store mapping"],
-  "master-material": ["Material Item", "Pipe, fitting, valve and consumable definitions"],
+  "master-project": ["Project", "ERPNext Project master records"],
+  "master-site": ["Site", "CMR site master records"],
+  "master-material": ["Item", "All ERPNext Item master records"],
   "master-contractor": ["Contractor", "Execution contractor and site assignments"],
   "master-supplier": ["Supplier", "Material inward supplier master"],
   "master-store": ["Store", "Project and contractor stock locations"],
@@ -32,7 +32,13 @@ const pages = {
   "restoration-register": ["Restoration Register", "Submitted road restoration register"],
 };
 
-const pageMeta = computed(() => pages[currentPage.value] || pages.dashboard);
+const pageMeta = computed(() => {
+  if (!simpleMasters.value) {
+    const legacy = { masters: ["Masters & Settings", "Configure master data used by CMR workflows"], "master-project": ["Project Master", "Project setup for CMR execution sites"], "master-site": ["Site Master", "Project, zone, village and store mapping"], "master-material": ["Material Item", "Pipe, fitting, valve and consumable definitions"] };
+    if (legacy[currentPage.value]) return legacy[currentPage.value];
+  }
+  return pages[currentPage.value] || pages.dashboard;
+});
 const user = computed(() => props.bootstrap?.user || "Administrator");
 const company = computed(() => props.bootstrap?.company || "Raisoni Group");
 const financialYear = computed(() => props.bootstrap?.financial_year || "FY 26-27");
@@ -45,10 +51,11 @@ const financialYear = computed(() => props.bootstrap?.financial_year || "FY 26-2
     :user="user"
     :company="company"
     :financial-year="financialYear"
+    :simple-masters="simpleMasters"
     @navigate="currentPage = $event"
   >
     <Dashboard v-if="currentPage === 'dashboard'" :user="user" :metrics="bootstrap.metrics" :recent-activity="bootstrap.recent_activity" @navigate="currentPage = $event" />
-    <MasterSetup v-else-if="currentPage === 'masters'" @navigate="currentPage = $event" />
-    <PlaceholderPage v-else :title="pageMeta[0]" :description="pageMeta[1]" :page-key="currentPage" @navigate="currentPage = $event" />
+    <MasterSetup v-else-if="!simpleMasters && currentPage === 'masters'" @navigate="currentPage = $event" />
+    <PlaceholderPage v-else :title="pageMeta[0]" :description="pageMeta[1]" :page-key="currentPage" :simple-masters="simpleMasters" @navigate="currentPage = $event" />
   </AppShell>
 </template>

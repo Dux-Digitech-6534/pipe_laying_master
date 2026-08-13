@@ -8,6 +8,7 @@ def get_bootstrap():
 		"user": frappe.utils.get_fullname(frappe.session.user),
 		"user_id": frappe.session.user,
 		"app_name": "cmr_pipe_laying_master",
+		"site": frappe.local.site,
 		"app_title": "CMR Pipe Laying Master",
 		"version": "0.1.0",
 		"company": frappe.defaults.get_user_default("Company") or frappe.defaults.get_global_default("company"),
