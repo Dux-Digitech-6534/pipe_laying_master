@@ -7,7 +7,12 @@ import PlaceholderPage from "./pages/PlaceholderPage.vue";
 
 const props = defineProps({ bootstrap: { type: Object, default: () => ({}) } });
 const currentPage = ref("dashboard");
-const simpleMasters = computed(() => props.bootstrap?.site === "jewipl.duxdigitech.in");
+const simpleMasterSites = new Set([
+  "jewipl.duxdigitech.in",
+  "raisonigroup.duxdigitech.in",
+]);
+const simpleMasters = computed(() => simpleMasterSites.has(props.bootstrap?.site));
+const raisoniMasterEditing = computed(() => props.bootstrap?.site === "raisonigroup.duxdigitech.in");
 
 const pages = {
   dashboard: ["Dashboard", "Project execution and material overview"],
@@ -18,14 +23,16 @@ const pages = {
   valves: ["Valve Details", "Record valve installation against registered pipe segments"],
   restoration: ["Road Restoration", "Track restoration work against pipe laying measurements"],
   "master-project": ["Project", "ERPNext Project master records"],
-  "master-site": ["Site", "CMR site master records"],
+  "master-site": ["Site", "Site master records"],
+  "master-zone": ["Zone", "Project and site-wise zone master records"],
+  "master-village": ["Village", "Project, site and zone-wise village master records"],
   "master-material": ["Item", "All ERPNext Item master records"],
-  "master-contractor": ["Contractor", "Execution contractor and site assignments"],
-  "master-supplier": ["Supplier", "Material inward supplier master"],
+  "master-contractor": ["Contractor at Site", "Execution contractor and site assignments"],
+  "master-supplier": ["Supplier / Contractor", "Material inward supplier master"],
   "master-store": ["Store", "Project and contractor stock locations"],
   "master-attributes": ["Material Attributes", "Reusable material specifications and UOM values"],
   "pipe-register": ["Pipe Laying Register", "Submitted pipe measurements"],
-  "material-movement": ["Material Movement", "CMR stock movement register"],
+  "material-movement": ["Material Movement", "Stock movement register"],
   "material-stock": ["Material Stock", "Project and contractor stock visibility"],
   "contractor-stock": ["Contractor Stock", "Material currently held by contractors"],
   "valve-register": ["Valve Register", "Submitted valve installation register"],
@@ -52,10 +59,11 @@ const financialYear = computed(() => props.bootstrap?.financial_year || "FY 26-2
     :company="company"
     :financial-year="financialYear"
     :simple-masters="simpleMasters"
+    :hierarchy-masters="raisoniMasterEditing"
     @navigate="currentPage = $event"
   >
     <Dashboard v-if="currentPage === 'dashboard'" :user="user" :metrics="bootstrap.metrics" :recent-activity="bootstrap.recent_activity" @navigate="currentPage = $event" />
     <MasterSetup v-else-if="!simpleMasters && currentPage === 'masters'" @navigate="currentPage = $event" />
-    <PlaceholderPage v-else :title="pageMeta[0]" :description="pageMeta[1]" :page-key="currentPage" :simple-masters="simpleMasters" @navigate="currentPage = $event" />
+    <PlaceholderPage v-else :title="pageMeta[0]" :description="pageMeta[1]" :page-key="currentPage" :simple-masters="simpleMasters" :enable-master-edit="raisoniMasterEditing" :hierarchy-enabled="raisoniMasterEditing" @navigate="currentPage = $event" />
   </AppShell>
 </template>

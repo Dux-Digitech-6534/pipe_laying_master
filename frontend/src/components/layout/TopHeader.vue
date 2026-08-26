@@ -12,10 +12,9 @@ function reloadPage() { window.location.reload(); }
 
 <template>
   <header class="cmr-topbar">
-    <div class="cmr-top-left"><button class="cmr-icon-button" type="button" aria-label="Toggle navigation" @click="$emit('toggle-sidebar')">☰</button><div class="cmr-breadcrumb"><span>CMR Portal</span><i>/</i><b>{{ pageTitle }}</b></div></div>
+    <div class="cmr-top-left"><button class="cmr-icon-button" type="button" aria-label="Toggle navigation" @click="$emit('toggle-sidebar')">☰</button><div class="cmr-breadcrumb"><span>Pipe Laying</span><i>/</i><b>{{ pageTitle }}</b></div></div>
     <div class="cmr-top-right">
       <div class="cmr-meta"><small>FINANCIAL YEAR</small><b>{{ financialYear }}</b></div>
-      <select class="cmr-company-select" aria-label="Company"><option>{{ company }}</option></select>
       <button class="cmr-icon-button" type="button" title="Refresh" aria-label="Refresh" @click="reloadPage">↻</button>
       <button class="cmr-icon-button" type="button" title="Notifications" aria-label="Notifications">○</button>
       <span class="cmr-avatar">{{ initials() }}</span>

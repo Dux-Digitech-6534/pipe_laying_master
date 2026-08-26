@@ -1,7 +1,11 @@
 frappe.pages["cmr-pipe-laying-master"].on_page_load = function (wrapper) {
-	const UI_VERSION = "14";
+	// The frontend bundle is versioned independently from the Frappe Page record.
+	// Do not let Desk keep an old loader in localStorage across deployments.
+	localStorage.removeItem("_page:cmr-pipe-laying-master");
+	const UI_VERSION = "54";
 	const page = frappe.ui.make_app_page({ parent: wrapper, title: __("CMR Pipe Laying Master"), single_column: true });
 	$(wrapper).find(".page-head").hide();
+	document.body.classList.add("cmr-hide-native-sidebar");
 	page.main.html('<div class="cmr-page-host"><div class="cmr-loading">Loading CMR Pipe Laying Master...</div></div>');
 	const host = page.main.find(".cmr-page-host").get(0);
 
@@ -47,8 +51,8 @@ frappe.pages["cmr-pipe-laying-master"].on_page_load = function (wrapper) {
 		method: "cmr_pipe_laying_master.api.bootstrap.get_bootstrap",
 		callback: async function (response) {
 			try {
-				load_css("/assets/cmr_pipe_laying_master/dist/cmr-pipe-laying-master-v14.css");
-				await load_script("/assets/cmr_pipe_laying_master/dist/cmr-pipe-laying-master-v14.js");
+				load_css("/assets/cmr_pipe_laying_master/dist/cmr-pipe-laying-master-v54.css");
+				await load_script("/assets/cmr_pipe_laying_master/dist/cmr-pipe-laying-master-v54.js");
 				if (!window.CMRPipeLayingMaster?.mount || window.CMRPipeLayingMaster.version !== UI_VERSION) throw new Error("Latest frontend bundle could not be activated.");
 				window.CMRPipeLayingMaster.mount(host, { bootstrap: response.message || {} });
 			} catch (error) {
@@ -61,4 +65,5 @@ frappe.pages["cmr-pipe-laying-master"].on_page_load = function (wrapper) {
 
 frappe.pages["cmr-pipe-laying-master"].on_page_hide = function () {
 	if (window.CMRPipeLayingMaster?.unmount) window.CMRPipeLayingMaster.unmount();
+	document.body.classList.remove("cmr-hide-native-sidebar");
 };

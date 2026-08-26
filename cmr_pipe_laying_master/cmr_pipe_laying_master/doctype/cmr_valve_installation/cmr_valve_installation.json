@@ -1,6 +1,6 @@
 {
  "actions": [], "autoname": "format:CMR-VAL-{YYYY}-{#####}", "doctype": "DocType", "engine": "InnoDB",
- "field_order": ["installation_date", "company", "project", "site", "zone", "village", "pipe_measurement", "pipe_no", "contractor_assignment", "contractor_warehouse", "valve_section", "valve_item", "quantity", "uom", "chamber_size", "specific_location", "gps_latitude", "gps_longitude", "fittings_section", "fittings", "status", "remarks", "stock_entry"],
+ "field_order": ["installation_date", "company", "project", "site", "zone", "village", "pipe_measurement", "pipe_no", "contractor_assignment", "contractor_warehouse", "valve_section", "valve_item", "quantity", "uom", "moc", "pressure_rating", "diameter", "current_stock", "chamber_size", "specific_location", "gps_latitude", "gps_longitude", "gps_accuracy", "fittings_section", "fittings", "total_fitting_qty", "status", "remarks", "stock_entry"],
  "fields": [
   {"default": "Today", "fieldname": "installation_date", "fieldtype": "Date", "in_list_view": 1, "label": "Installation Date", "reqd": 1},
   {"fieldname": "company", "fieldtype": "Link", "label": "Company", "options": "Company", "reqd": 1},
@@ -16,12 +16,18 @@
   {"fieldname": "valve_item", "fieldtype": "Link", "in_list_view": 1, "label": "Valve Item", "options": "Item", "reqd": 1},
   {"default": "1", "fieldname": "quantity", "fieldtype": "Float", "in_list_view": 1, "label": "Quantity", "reqd": 1},
   {"default": "Nos", "fieldname": "uom", "fieldtype": "Link", "label": "UOM", "options": "UOM", "reqd": 1},
+  {"fieldname": "moc", "fieldtype": "Data", "label": "MOC", "read_only": 1},
+  {"fieldname": "pressure_rating", "fieldtype": "Data", "label": "Class / Specification", "read_only": 1},
+  {"fieldname": "diameter", "fieldtype": "Float", "label": "Diameter / Size", "read_only": 1},
+  {"fieldname": "current_stock", "fieldtype": "Float", "label": "Current Contractor Stock", "read_only": 1},
   {"fieldname": "chamber_size", "fieldtype": "Data", "label": "Valve Chamber Size", "reqd": 1},
   {"fieldname": "specific_location", "fieldtype": "Data", "label": "Specific Location"},
   {"fieldname": "gps_latitude", "fieldtype": "Float", "label": "GPS Latitude", "reqd": 1},
   {"fieldname": "gps_longitude", "fieldtype": "Float", "label": "GPS Longitude", "reqd": 1},
+  {"fieldname": "gps_accuracy", "fieldtype": "Float", "label": "GPS Accuracy (m)", "read_only": 1},
   {"fieldname": "fittings_section", "fieldtype": "Section Break", "label": "Valve Fittings"},
   {"fieldname": "fittings", "fieldtype": "Table", "label": "Fitting Consumption", "options": "CMR Valve Fitting Item"},
+  {"fieldname": "total_fitting_qty", "fieldtype": "Float", "label": "Total Fitting Quantity", "read_only": 1},
   {"default": "Draft", "fieldname": "status", "fieldtype": "Select", "label": "Status", "options": "Draft\nCompleted", "read_only": 1},
   {"fieldname": "remarks", "fieldtype": "Small Text", "label": "Remarks"},
   {"fieldname": "stock_entry", "fieldtype": "Link", "label": "Consumption Stock Entry", "options": "Stock Entry", "read_only": 1}

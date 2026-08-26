@@ -1,6 +1,6 @@
 {
  "actions": [], "doctype": "DocType", "editable_grid": 1, "engine": "InnoDB",
- "field_order": ["pipe_no", "pipe_item", "start_node", "end_node", "chainage_from", "chainage_to", "diameter", "moc", "pressure_rating", "drawing_length", "actual_length", "current_stock", "valve_status", "restoration_required", "restoration_status"],
+ "field_order": ["pipe_no", "pipe_item", "start_node", "end_node", "chainage_from", "chainage_to", "chainage_length", "diameter", "moc", "pressure_rating", "drawing_length", "actual_length", "current_stock", "valve_status", "restoration_required", "restoration_status"],
  "fields": [
   {"fieldname": "pipe_no", "fieldtype": "Data", "in_list_view": 1, "label": "Pipe No", "reqd": 1},
   {"fieldname": "pipe_item", "fieldtype": "Link", "in_list_view": 1, "label": "Pipe Item", "options": "Item", "reqd": 1},
@@ -8,6 +8,7 @@
   {"fieldname": "end_node", "fieldtype": "Data", "label": "End Node"},
   {"fieldname": "chainage_from", "fieldtype": "Float", "in_list_view": 1, "label": "Chainage From", "reqd": 1},
   {"fieldname": "chainage_to", "fieldtype": "Float", "in_list_view": 1, "label": "Chainage To", "reqd": 1},
+  {"fieldname": "chainage_length", "fieldtype": "Float", "label": "Chainage Length", "precision": "3", "read_only": 1},
   {"fieldname": "diameter", "fieldtype": "Float", "label": "Diameter (mm)"},
   {"fieldname": "moc", "fieldtype": "Data", "label": "MOC"},
   {"fieldname": "pressure_rating", "fieldtype": "Data", "label": "Class / Pressure Rating"},

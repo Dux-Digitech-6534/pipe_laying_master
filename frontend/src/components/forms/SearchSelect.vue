@@ -14,9 +14,27 @@ const props = defineProps({
 const emit = defineEmits(["update:modelValue", "change", "create"]);
 const root = ref(null);
 const searchInput = ref(null);
+const menuRef = ref(null);
+const menuStyle = ref({});
 const open = ref(false);
 const query = ref("");
 const activeIndex = ref(0);
+
+function updatePosition() {
+  if (!root.value) return;
+  const rect = root.value.getBoundingClientRect();
+  menuStyle.value = { position: "fixed", top: `${rect.bottom + 6}px`, left: `${rect.left}px`, width: `${rect.width}px`, right: "auto" };
+}
+watch(open, (isOpen) => {
+  if (isOpen) {
+    updatePosition();
+    window.addEventListener("scroll", updatePosition, true);
+    window.addEventListener("resize", updatePosition);
+  } else {
+    window.removeEventListener("scroll", updatePosition, true);
+    window.removeEventListener("resize", updatePosition);
+  }
+});
 
 const normalized = computed(() => props.options.map(option => typeof option === "object" ? option : ({ name: option })));
 const selected = computed(() => normalized.value.find(option => String(option[props.valueKey] ?? "") === String(props.modelValue ?? "")));
@@ -64,9 +82,15 @@ function keydown(event) {
   if (event.key === "Enter" && filtered.value[activeIndex.value]) { event.preventDefault(); choose(filtered.value[activeIndex.value]); }
   if (event.key === "Escape") { event.preventDefault(); open.value = false; }
 }
-function outside(event) { if (root.value && !root.value.contains(event.target)) open.value = false; }
+function outside(event) {
+  if (root.value && !root.value.contains(event.target) && !(menuRef.value && menuRef.value.contains(event.target))) open.value = false;
+}
 onMounted(() => document.addEventListener("pointerdown", outside));
-onBeforeUnmount(() => document.removeEventListener("pointerdown", outside));
+onBeforeUnmount(() => {
+  document.removeEventListener("pointerdown", outside);
+  window.removeEventListener("scroll", updatePosition, true);
+  window.removeEventListener("resize", updatePosition);
+});
 </script>
 
 <template>
@@ -77,15 +101,17 @@ onBeforeUnmount(() => document.removeEventListener("pointerdown", outside));
       <button v-if="modelValue && !disabled" class="dux-select-clear" type="button" aria-label="Clear selection" @click.stop="clear">×</button>
       <svg v-else class="dux-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg>
     </div>
-    <div v-if="open" class="dux-search-menu">
-      <div class="dux-search-meta">{{ filtered.length }} options</div>
-      <button v-for="(option, index) in filtered" :key="String(option[valueKey])" type="button" class="dux-search-option" :class="{ active: index === activeIndex, selected: String(option[valueKey]) === String(modelValue) }" @mouseenter="activeIndex = index" @click="choose(option)">
-        <span><b>{{ option[labelKey] || option[valueKey] }}</b><small v-if="secondaryKey && option[secondaryKey]">{{ option[secondaryKey] }}</small></span>
-        <svg v-if="String(option[valueKey]) === String(modelValue)" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>
-      </button>
-      <div v-if="!filtered.length" class="dux-search-empty">No matching records</div>
-      <button v-if="createLabel" type="button" class="dux-search-create" @click="emit('create', query); open = false"><span>＋</span>{{ createLabel }}</button>
-    </div>
+    <Teleport to="body">
+      <div v-if="open" ref="menuRef" class="dux-search-menu" :style="menuStyle">
+        <div class="dux-search-meta">{{ filtered.length }} options</div>
+        <button v-for="(option, index) in filtered" :key="String(option[valueKey])" type="button" class="dux-search-option" :class="{ active: index === activeIndex, selected: String(option[valueKey]) === String(modelValue) }" @mouseenter="activeIndex = index" @click="choose(option)">
+          <span><b>{{ option[labelKey] || option[valueKey] }}</b><small v-if="secondaryKey && option[secondaryKey]">{{ option[secondaryKey] }}</small></span>
+          <svg v-if="String(option[valueKey]) === String(modelValue)" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>
+        </button>
+        <div v-if="!filtered.length" class="dux-search-empty">No matching records</div>
+        <button v-if="createLabel" type="button" class="dux-search-create" @click="emit('create', query); open = false"><span>＋</span>{{ createLabel }}</button>
+      </div>
+    </Teleport>
   </div>
 </template>
 

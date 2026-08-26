@@ -1,6 +1,6 @@
 {
  "actions": [], "autoname": "format:CMR-RR-{YYYY}-{#####}", "doctype": "DocType", "engine": "InnoDB",
- "field_order": ["restoration_date", "company", "project", "site", "zone", "village", "pipe_measurement", "pipe_no", "contractor_assignment", "pipe_section", "pipe_length", "pipe_width", "restoration_type", "m15_section", "m15_length", "m15_depth", "m15_quantity", "m20_length", "m20_depth", "m20_quantity", "m30_length", "m30_depth", "m30_quantity", "location_section", "gps_latitude_from", "gps_longitude_from", "gps_latitude_to", "gps_longitude_to", "status", "remarks"],
+ "field_order": ["restoration_date", "company", "project", "site", "zone", "village", "pipe_measurement", "pipe_no", "contractor_assignment", "pipe_section", "pipe_length", "pipe_width", "restoration_type", "dismantling_length", "dismantling_depth", "dismantling_quantity", "m15_section", "m15_length", "m15_depth", "m15_quantity", "m20_length", "m20_depth", "m20_quantity", "m30_length", "m30_depth", "m30_quantity", "total_concrete_quantity", "location_section", "gps_latitude_from", "gps_longitude_from", "gps_latitude_to", "gps_longitude_to", "status", "remarks"],
  "fields": [
   {"default": "Today", "fieldname": "restoration_date", "fieldtype": "Date", "in_list_view": 1, "label": "Restoration Date", "reqd": 1},
   {"fieldname": "company", "fieldtype": "Link", "label": "Company", "options": "Company", "reqd": 1},
@@ -15,6 +15,9 @@
   {"fieldname": "pipe_length", "fieldtype": "Float", "label": "Pipe / Restoration Length (m)", "reqd": 1},
   {"fieldname": "pipe_width", "fieldtype": "Float", "label": "Restoration Width (m)", "reqd": 1},
   {"fieldname": "restoration_type", "fieldtype": "Select", "in_list_view": 1, "label": "Restoration Type", "options": "CC Road\nBT Road\nWBM Road\nPaver Block\nEarthen Road\nOther", "reqd": 1},
+  {"fieldname": "dismantling_length", "fieldtype": "Float", "label": "Dismantling Length (m)"},
+  {"fieldname": "dismantling_depth", "fieldtype": "Float", "label": "Dismantling Depth (m)"},
+  {"fieldname": "dismantling_quantity", "fieldtype": "Float", "label": "Dismantling Qty (m³)", "read_only": 1},
   {"fieldname": "m15_section", "fieldtype": "Section Break", "label": "M15 / M20 / M30 Concrete"},
   {"fieldname": "m15_length", "fieldtype": "Float", "label": "M15 Length (m)"},
   {"fieldname": "m15_depth", "fieldtype": "Float", "label": "M15 Depth (m)"},
@@ -25,6 +28,7 @@
   {"fieldname": "m30_length", "fieldtype": "Float", "label": "M30 Length (m)"},
   {"fieldname": "m30_depth", "fieldtype": "Float", "label": "M30 Depth (m)"},
   {"fieldname": "m30_quantity", "fieldtype": "Float", "label": "M30 Qty (m³)", "read_only": 1},
+  {"fieldname": "total_concrete_quantity", "fieldtype": "Float", "label": "Total Concrete Qty (m³)", "read_only": 1},
   {"fieldname": "location_section", "fieldtype": "Section Break", "label": "GPS and Completion"},
   {"fieldname": "gps_latitude_from", "fieldtype": "Float", "label": "From Latitude"},
   {"fieldname": "gps_longitude_from", "fieldtype": "Float", "label": "From Longitude"},

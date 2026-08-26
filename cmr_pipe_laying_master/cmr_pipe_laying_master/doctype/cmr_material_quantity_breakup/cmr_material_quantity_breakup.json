@@ -3,7 +3,7 @@
  "field_order": ["item_code", "pipe_or_roll", "nos", "length", "total_length"],
  "fields": [
   {"fieldname": "item_code", "fieldtype": "Link", "in_list_view": 1, "label": "Item", "options": "Item", "reqd": 1},
-  {"fieldname": "pipe_or_roll", "fieldtype": "Data", "in_list_view": 1, "label": "Pipe / Roll"},
+  {"fieldname": "pipe_or_roll", "fieldtype": "Select", "in_list_view": 1, "label": "Pipe / Roll", "options": "Pipe\nRoll"},
   {"fieldname": "nos", "fieldtype": "Float", "in_list_view": 1, "label": "Nos", "reqd": 1},
   {"fieldname": "length", "fieldtype": "Float", "in_list_view": 1, "label": "Length", "reqd": 1},
   {"fieldname": "total_length", "fieldtype": "Float", "in_list_view": 1, "label": "Total Length", "read_only": 1}

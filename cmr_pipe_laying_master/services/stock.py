@@ -2,6 +2,7 @@ from collections import defaultdict
 
 import frappe
 from frappe.utils import flt
+from erpnext.stock.utils import get_stock_balance
 
 
 ENTRY_TYPES = {
@@ -68,3 +69,56 @@ def cancel_linked_stock_entry(stock_entry):
 	entry = frappe.get_doc("Stock Entry", stock_entry)
 	if entry.docstatus == 1:
 		entry.cancel()
+ATTRIBUTE_FIELD_MAP = {
+	"material type": "material_type",
+	"item type": "material_type",
+	"moc": "moc",
+	"material of construction": "moc",
+	"class": "pressure_rating",
+	"specification": "pressure_rating",
+	"pressure rating": "pressure_rating",
+	"size": "diameter",
+	"diameter": "diameter",
+	"dia": "diameter",
+}
+
+
+def get_item_operational_details(item_code, warehouse=None):
+	"""Return native Item/UOM, variant attributes and live ERPNext stock balance."""
+	item = frappe.get_cached_doc("Item", item_code)
+	values = frappe._dict({
+		"uom": item.stock_uom,
+		"material_type": (
+			item.get("custom_cmr_material_type")
+			if item.meta.has_field("custom_cmr_material_type")
+			else ""
+		) or item.item_group,
+		"moc": item.get("custom_cmr_moc") if item.meta.has_field("custom_cmr_moc") else "",
+		"pressure_rating": item.get("custom_cmr_pressure_rating") if item.meta.has_field("custom_cmr_pressure_rating") else "",
+		"diameter": flt(item.get("custom_cmr_diameter")) if item.meta.has_field("custom_cmr_diameter") else 0,
+		"current_stock": flt(get_stock_balance(item_code, warehouse), 3) if warehouse else 0,
+	})
+	for row in frappe.get_all(
+		"Item Variant Attribute",
+		fields=["attribute", "attribute_value"],
+		filters={"parent": item_code},
+		limit_page_length=100,
+	):
+		target = ATTRIBUTE_FIELD_MAP.get((row.attribute or "").strip().lower())
+		if target:
+			values[target] = flt(row.attribute_value) if target == "diameter" else row.attribute_value
+	return values
+
+
+def validate_execution_item_type(item_code, expected_type, material_type=None):
+	"""Reject execution items that do not match the existing Item material classification."""
+	actual_type = material_type
+	if actual_type is None:
+		actual_type = get_item_operational_details(item_code).material_type
+	if (actual_type or "").strip().casefold() != (expected_type or "").strip().casefold():
+		frappe.throw(
+			frappe._("Selected item {0} is not a {1} item.").format(
+				frappe.bold(item_code), frappe.bold(expected_type)
+			)
+		)
+	return actual_type

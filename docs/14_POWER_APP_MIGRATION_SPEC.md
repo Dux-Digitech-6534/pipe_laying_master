@@ -6,7 +6,7 @@ Source: `CMR PIPE LAYING.docx`, reviewed on 2026-08-12. The reference contains 2
 
 - User: Home, Material Inward, Material Issue, Material Return, Pipe Laying Measurement, Valve Details, Road Restoration, and view screens.
 - Approver: all user menus plus Pipe Laying Approval.
-- ERP implementation: CMR Site Engineer and CMR Store User create operational drafts; CMR Project Manager approves/submits; CMR Pipe Admin has full access; CMR Pipe Viewer is read-only.
+- ERP implementation: access follows standard ERPNext DocType permissions. Pipe-laying workflow actions remain restricted to System Manager pending an approved business-role mapping.
 
 ## Material Inward
 

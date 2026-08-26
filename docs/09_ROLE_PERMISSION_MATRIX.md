@@ -1,12 +1,5 @@
-# Role Permission Matrix
+# Permission Model
 
-| Role | Masters | Material | Execution | Submit/Cancel | Reports |
-|---|---|---|---|---|---|
-| CMR Pipe Admin | Full | Full | Full | Yes | Full |
-| CMR Master Manager | Manage | Read | Read | No | Read |
-| CMR Store User | Read | Create/edit | Read | Material only, as approved | Material |
-| CMR Site Engineer | Read | Read | Create/edit draft | No by default | Execution |
-| CMR Project Manager | Read | Review | Review | Yes, as approved | Full |
-| CMR Pipe Viewer | Read | Read | Read | No | Read-only |
+The application does not create or require custom CMR roles.
 
-Exact Custom DocPerm and standard Purchase Receipt/Stock Entry permission integration will be implemented and tested in Phase 8. Frontend visibility is not a security boundary.
+Access is controlled by standard ERPNext DocType permissions. The pipe-laying approval workflow remains enabled and is restricted to System Manager until the business approves a different standard role mapping. Frontend visibility is not a security boundary.

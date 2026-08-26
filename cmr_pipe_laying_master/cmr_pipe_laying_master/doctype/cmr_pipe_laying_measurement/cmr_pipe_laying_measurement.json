@@ -3,7 +3,7 @@
  "autoname": "format:CMR-PLM-{YYYY}-{#####}",
  "doctype": "DocType",
  "engine": "InnoDB",
- "field_order": ["header_tab", "laying_date", "company", "project", "site", "zone", "village", "type_of_work", "laying_mode", "trench_method", "section_incharge", "contractor_assignment", "contractor_warehouse", "status", "measurement_tab", "segments", "pipe_width", "total_actual_length", "earthwork_tab", "excavation_details", "total_excavation_qty", "refill_details", "total_refill_qty", "fittings_tab", "fittings", "completion_tab", "restoration_required", "end_cap", "remarks", "stock_entry"],
+ "field_order": ["header_tab", "laying_date", "company", "project", "site", "zone", "village", "type_of_work", "laying_mode", "trench_method", "section_incharge", "contractor_assignment", "contractor_warehouse", "status", "measurement_tab", "segments", "pipe_width", "total_actual_length", "earthwork_tab", "excavation_details", "total_excavation_qty", "refill_details", "total_refill_qty", "fittings_tab", "fittings", "total_fitting_qty", "completion_tab", "restoration_required", "end_cap", "remarks", "stock_entry"],
  "fields": [
   {"fieldname": "header_tab", "fieldtype": "Tab Break", "label": "Work Information"},
   {"default": "Today", "fieldname": "laying_date", "fieldtype": "Date", "in_list_view": 1, "label": "Laying Date", "reqd": 1},
@@ -30,6 +30,7 @@
   {"fieldname": "total_refill_qty", "fieldtype": "Float", "label": "Total Refill Qty (m³)", "read_only": 1},
   {"fieldname": "fittings_tab", "fieldtype": "Tab Break", "label": "Fittings"},
   {"fieldname": "fittings", "fieldtype": "Table", "label": "Fitting Consumption", "options": "CMR Fitting Consumption"},
+  {"fieldname": "total_fitting_qty", "fieldtype": "Float", "label": "Total Fitting Qty", "precision": "3", "read_only": 1},
   {"fieldname": "completion_tab", "fieldtype": "Tab Break", "label": "Completion"},
   {"default": "1", "fieldname": "restoration_required", "fieldtype": "Check", "label": "Road Restoration Required"},
   {"default": "N/A", "fieldname": "end_cap", "fieldtype": "Select", "label": "End Cap", "options": "N/A\nYes\nNo"},
