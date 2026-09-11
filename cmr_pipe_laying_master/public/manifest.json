@@ -1,0 +1,31 @@
+{
+  "name": "CMR Pipe Laying Master",
+  "short_name": "CMR Pipe Laying",
+  "description": "Pipe execution and material management for CMR",
+  "start_url": "/pipe",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#F5F6F8",
+  "theme_color": "#5C4DE6",
+  "icons": [
+    {
+      "src": "/assets/cmr_pipe_laying_master/icons/cmr-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/cmr_pipe_laying_master/icons/cmr-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/cmr_pipe_laying_master/icons/cmr-icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

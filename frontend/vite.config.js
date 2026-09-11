@@ -14,12 +14,12 @@ export default defineConfig({
       entry: resolve(__dirname, "src/main.js"),
       name: "CMRPipeLayingMaster",
       formats: ["iife"],
-      fileName: () => "cmr-pipe-laying-master-v54.js",
+      fileName: () => "cmr-pipe-laying-master-v57.js",
     },
     rollupOptions: {
       output: {
         footer: "window.CMRPipeLayingMaster = CMRPipeLayingMaster;",
-        assetFileNames: (assetInfo) => assetInfo.name === "style.css" ? "cmr-pipe-laying-master-v54.css" : "[name][extname]",
+        assetFileNames: (assetInfo) => assetInfo.name === "style.css" ? "cmr-pipe-laying-master-v57.css" : "[name][extname]",
       },
     },
   },

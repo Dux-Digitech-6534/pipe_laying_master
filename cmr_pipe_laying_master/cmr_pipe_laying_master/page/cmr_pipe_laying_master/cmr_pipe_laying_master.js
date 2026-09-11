@@ -2,7 +2,7 @@ frappe.pages["cmr-pipe-laying-master"].on_page_load = function (wrapper) {
 	// The frontend bundle is versioned independently from the Frappe Page record.
 	// Do not let Desk keep an old loader in localStorage across deployments.
 	localStorage.removeItem("_page:cmr-pipe-laying-master");
-	const UI_VERSION = "54";
+	const UI_VERSION = "57";
 	const page = frappe.ui.make_app_page({ parent: wrapper, title: __("CMR Pipe Laying Master"), single_column: true });
 	$(wrapper).find(".page-head").hide();
 	document.body.classList.add("cmr-hide-native-sidebar");
@@ -32,27 +32,73 @@ frappe.pages["cmr-pipe-laying-master"].on_page_load = function (wrapper) {
 		document.head.appendChild(link);
 	}
 
-	function load_script(url) {
+	function load_script(url, attempt = 1) {
 		return new Promise((resolve, reject) => {
 			if (window.CMRPipeLayingMaster?.version === UI_VERSION) return resolve();
 			document.querySelectorAll('script[data-cmr-ui]').forEach((element) => element.remove());
 			const script = document.createElement("script");
-			script.src = `${url}?v=${UI_VERSION}`;
+			script.src = `${url}?v=${UI_VERSION}&r=${attempt}`;
 			script.async = true;
 			script.dataset.cmrUi = UI_VERSION;
 			script.onload = resolve;
-			script.onerror = () => reject(new Error("CMR frontend JavaScript could not be downloaded."));
+			script.onerror = () => {
+				script.remove();
+				// A weak/flaky mobile connection can drop this request; retry a few times
+				// with backoff before surfacing the error screen to the user.
+				if (attempt < 4) {
+					setTimeout(() => load_script(url, attempt + 1).then(resolve, reject), attempt * 1200);
+				} else {
+					reject(new Error("CMR frontend JavaScript could not be downloaded."));
+				}
+			};
 			document.head.appendChild(script);
 		});
 	}
 
+	function register_pwa() {
+		if (!document.querySelector('link[rel="manifest"][data-cmr-pwa]')) {
+			const manifestLink = document.createElement("link");
+			manifestLink.rel = "manifest";
+			manifestLink.href = "/assets/cmr_pipe_laying_master/manifest.json";
+			manifestLink.dataset.cmrPwa = "1";
+			document.head.appendChild(manifestLink);
+		}
+		if (!document.querySelector('meta[name="theme-color"][data-cmr-pwa]')) {
+			// The Desk shell already ships its own theme-color tag; the first one in <head>
+			// wins in browsers, so temporarily disable it rather than just appending ours after it.
+			const nativeThemeMeta = document.querySelector('meta[name="theme-color"]:not([data-cmr-pwa])');
+			if (nativeThemeMeta) {
+				nativeThemeMeta.dataset.cmrDisabledName = "theme-color";
+				nativeThemeMeta.name = "cmr-disabled-theme-color";
+			}
+			const themeMeta = document.createElement("meta");
+			themeMeta.name = "theme-color";
+			themeMeta.content = "#5C4DE6";
+			themeMeta.dataset.cmrPwa = "1";
+			document.head.appendChild(themeMeta);
+		}
+		if (!document.querySelector('link[rel="apple-touch-icon"][data-cmr-pwa]')) {
+			const appleIcon = document.createElement("link");
+			appleIcon.rel = "apple-touch-icon";
+			appleIcon.href = "/assets/cmr_pipe_laying_master/icons/cmr-icon-192.png";
+			appleIcon.dataset.cmrPwa = "1";
+			document.head.appendChild(appleIcon);
+		}
+		if ("serviceWorker" in navigator) {
+			navigator.serviceWorker.register("/assets/cmr_pipe_laying_master/sw.js").catch(() => {
+				// PWA install/offline support is a bonus, not a requirement — never block the app on this.
+			});
+		}
+	}
+
+	register_pwa();
 	remove_stale_assets();
 	frappe.call({
 		method: "cmr_pipe_laying_master.api.bootstrap.get_bootstrap",
 		callback: async function (response) {
 			try {
-				load_css("/assets/cmr_pipe_laying_master/dist/cmr-pipe-laying-master-v54.css");
-				await load_script("/assets/cmr_pipe_laying_master/dist/cmr-pipe-laying-master-v54.js");
+				load_css("/assets/cmr_pipe_laying_master/dist/cmr-pipe-laying-master-v57.css");
+				await load_script("/assets/cmr_pipe_laying_master/dist/cmr-pipe-laying-master-v57.js");
 				if (!window.CMRPipeLayingMaster?.mount || window.CMRPipeLayingMaster.version !== UI_VERSION) throw new Error("Latest frontend bundle could not be activated.");
 				window.CMRPipeLayingMaster.mount(host, { bootstrap: response.message || {} });
 			} catch (error) {
@@ -66,4 +112,10 @@ frappe.pages["cmr-pipe-laying-master"].on_page_load = function (wrapper) {
 frappe.pages["cmr-pipe-laying-master"].on_page_hide = function () {
 	if (window.CMRPipeLayingMaster?.unmount) window.CMRPipeLayingMaster.unmount();
 	document.body.classList.remove("cmr-hide-native-sidebar");
+	document.querySelector('meta[name="theme-color"][data-cmr-pwa]')?.remove();
+	const nativeThemeMeta = document.querySelector('meta[data-cmr-disabled-name="theme-color"]');
+	if (nativeThemeMeta) {
+		nativeThemeMeta.name = nativeThemeMeta.dataset.cmrDisabledName;
+		delete nativeThemeMeta.dataset.cmrDisabledName;
+	}
 };

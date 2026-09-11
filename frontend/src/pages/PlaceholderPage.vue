@@ -9,7 +9,7 @@ import ReportList from "./ReportList.vue";
 import TransactionList from "./TransactionList.vue";
 import "../entry.css";
 
-const props = defineProps({ title: String, description: String, pageKey: String, simpleMasters: Boolean, enableMasterEdit: Boolean, hierarchyEnabled: Boolean });
+const props = defineProps({ title: String, description: String, pageKey: String, simpleMasters: Boolean, enableMasterEdit: Boolean, hierarchyEnabled: Boolean, openRecordName: { type: String, default: "" } });
 const emit = defineEmits(["navigate"]);
 const configs = {
   "material-inward": { doctype: "Purchase Receipt", label: "Material Inward", defaults: { source_app: "CMR Pipe Laying Master" } },
@@ -48,7 +48,13 @@ const listRefresh = ref(0);
 const editingRecord = ref("");
 const returnAgainst = ref("");
 const returnRecord = ref("");
-watch(() => props.pageKey, () => { creating.value = false; editingRecord.value = ""; returnAgainst.value = ""; returnRecord.value = ""; });
+watch(() => props.pageKey, () => {
+  creating.value = false; editingRecord.value = ""; returnAgainst.value = ""; returnRecord.value = "";
+  if (props.openRecordName && props.enableMasterEdit && isTransaction.value) {
+    editingRecord.value = props.openRecordName;
+    creating.value = true;
+  }
+}, { immediate: true });
 
 function newEntry() {
   if (!config.value) return;
@@ -68,9 +74,9 @@ function showBackendList() {
   creating.value = false;
   listRefresh.value += 1;
 }
-function handleMasterSaved(result) {
+function handleMasterSaved() {
   creating.value = false;
-  if (!hasCustomList.value && result?.doctype && window.frappe) window.frappe.set_route("List", result.doctype);
+  listRefresh.value += 1;
 }
 </script>
 

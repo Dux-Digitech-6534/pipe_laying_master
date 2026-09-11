@@ -141,6 +141,18 @@
   .cmr-app { display: block; }
   .cmr-sidebar { left: 0; transform: translateX(-100%); }
   .cmr-app.sidebar-open .cmr-sidebar { transform: none; box-shadow: 0 0 0 9999px rgba(17,24,39,.28); }
+  /* The off-canvas drawer always has full width to itself here, so the icon-only
+     "collapsed" rail styling (meant for the desktop grid layout) should never apply. */
+  .cmr-app.collapsed { --cmr-sidebar-width: 232px; }
+  .cmr-app.collapsed .cmr-brand-copy { display: block; }
+  .cmr-app.collapsed .cmr-nav-text { display: inline-block; }
+  .cmr-app.collapsed .cmr-nav-label { display: block; }
+  .cmr-app.collapsed .cmr-profile-copy { display: block; }
+  .cmr-app.collapsed .cmr-search-box input { display: inline-block; }
+  .cmr-app.collapsed .cmr-search-wrap { padding: 12px; }
+  .cmr-app.collapsed .cmr-search-box { justify-content: flex-start; padding: 0 10px; }
+  .cmr-app.collapsed .cmr-nav-item { justify-content: flex-start; padding: 9px 10px; }
+  .cmr-app.collapsed .cmr-sidebar-footer { justify-content: flex-start; padding: 12px; }
   .cmr-main { margin-left: 0; }
   .cmr-content { padding: 18px 12px 40px; }
   .cmr-topbar { padding: 0 12px; }

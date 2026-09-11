@@ -7,6 +7,11 @@ import PlaceholderPage from "./pages/PlaceholderPage.vue";
 
 const props = defineProps({ bootstrap: { type: Object, default: () => ({}) } });
 const currentPage = ref("dashboard");
+const openRecordName = ref("");
+function goTo(pageKey, recordName = "") {
+  currentPage.value = pageKey;
+  openRecordName.value = recordName;
+}
 const simpleMasterSites = new Set([
   "jewipl.duxdigitech.in",
   "raisonigroup.duxdigitech.in",
@@ -60,10 +65,10 @@ const financialYear = computed(() => props.bootstrap?.financial_year || "FY 26-2
     :financial-year="financialYear"
     :simple-masters="simpleMasters"
     :hierarchy-masters="raisoniMasterEditing"
-    @navigate="currentPage = $event"
+    @navigate="goTo($event)"
   >
-    <Dashboard v-if="currentPage === 'dashboard'" :user="user" :metrics="bootstrap.metrics" :recent-activity="bootstrap.recent_activity" @navigate="currentPage = $event" />
-    <MasterSetup v-else-if="!simpleMasters && currentPage === 'masters'" @navigate="currentPage = $event" />
-    <PlaceholderPage v-else :title="pageMeta[0]" :description="pageMeta[1]" :page-key="currentPage" :simple-masters="simpleMasters" :enable-master-edit="raisoniMasterEditing" :hierarchy-enabled="raisoniMasterEditing" @navigate="currentPage = $event" />
+    <Dashboard v-if="currentPage === 'dashboard'" :user="user" :metrics="bootstrap.metrics" :recent-activity="bootstrap.recent_activity" @navigate="goTo" />
+    <MasterSetup v-else-if="!simpleMasters && currentPage === 'masters'" @navigate="goTo($event)" />
+    <PlaceholderPage v-else :title="pageMeta[0]" :description="pageMeta[1]" :page-key="currentPage" :simple-masters="simpleMasters" :enable-master-edit="raisoniMasterEditing" :hierarchy-enabled="raisoniMasterEditing" :open-record-name="openRecordName" @navigate="goTo($event)" />
   </AppShell>
 </template>

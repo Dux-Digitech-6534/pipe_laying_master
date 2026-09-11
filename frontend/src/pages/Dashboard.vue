@@ -5,15 +5,21 @@ const props = defineProps({
   metrics: { type: Object, default: () => ({}) },
   recentActivity: { type: Array, default: () => [] },
 });
-defineEmits(["navigate"]);
+const emit = defineEmits(["navigate"]);
 const metricCards = [
   ["Pending Approvals", "pending_approvals", "▤", "purple"],
   ["Material Inward This Month", "material_inward_this_month", "↓", "green"],
   ["Pipe Laying Completed", "pipe_laying_completed", "⌁", "amber"],
   ["Pending Restoration", "pending_restoration", "≋", "blue"],
 ];
+const ACTIVITY_PAGE_MAP = {
+  "CMR Pipe Laying Measurement": "pipe-laying",
+  "CMR Valve Installation": "valves",
+  "CMR Road Restoration": "restoration",
+};
 function openActivity(row) {
-  if (window.frappe) window.frappe.set_route("Form", row.doctype, row.reference);
+  const pageKey = ACTIVITY_PAGE_MAP[row.doctype];
+  if (pageKey) emit("navigate", pageKey, row.reference);
 }
 </script>
 
